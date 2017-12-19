@@ -1,3 +1,5 @@
-## Welcome to Ahdak Blog
+# Blog
+Je créé ce blog pour partager mes connaissances avec la communauté.
 
-L'idée est de partager mes notes ressources avec la communauté.
+
+Ce Blog est maintenu par Ahmed DAMMAK.
