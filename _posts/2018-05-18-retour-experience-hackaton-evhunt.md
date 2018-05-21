@@ -11,8 +11,6 @@ comments: false
 # Introduction
 Je vous présente dans cet article mon retour d’expérience par rapport à mar participation au Hackaton Ev'hunt à la Société Générale les 16, 17 et 18 Mai 2018.
 
-<img src="{{ site.url }}/images/2018-05-18-retour-experience-hackaton-evhunt/sg-logo.png">
-
 L’objectif du Hackathon est de créer une plateforme pour faciliter le contact RH, Manager et Candidats.
 
 > "La perfection est atteinte, non pas lorsqu’il n’y a plus rien à ajouter, mais, lorsqu’il n’y a plus rien à retirer". - Antoine de Saint-Exupéry.
