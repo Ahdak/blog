@@ -17,7 +17,7 @@ L’objectif du Hackathon est de créer une plateforme pour faciliter le contact
 
 J'ai fait partie d'une équipe de 4 développeurs JAVA : Rafik, Fabuela, Meng et moi même.
 
-<img src="{{ site.url }}/images/2018-05-18-retour-experience-hackaton-evhunt/presentation.png">
+<img src="{{ site.url }}/images/2018-05-18-retour-experience-hackaton-evhunt/presentation.jpg">
 
 # Notre solution
 
@@ -29,7 +29,7 @@ On a pensé une solution de bout-en-bout qui a pour objectif de :
 * Faciliter le suivi des candidatures Afficher des statistiques
 
 ## Architecture
-<img src="{{ site.url }}/images/2018-05-18-retour-experience-hackaton-evhunt/architecture.png">
+<img src="{{ site.url }}/images/2018-05-18-retour-experience-hackaton-evhunt/architecture.jpg">
 
 # Techniquement
 
