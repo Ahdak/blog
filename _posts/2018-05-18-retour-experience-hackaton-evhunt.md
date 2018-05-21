@@ -39,6 +39,7 @@ On a pensé une solution de bout-en-bout qui a pour objectif de :
 * Watson pour la partie IA
 * Angular 4 pour le client Web (Géré par JHipster)
 * ELK Stack pour le monitoring
+<img src="{{ site.url }}/images/2018-05-18-retour-experience-hackaton-evhunt/technos.png">
 
 Le développement **Android** et **ElsticSearch** a été assuré par Rafik. La partie Front en **Angular** a été entièrement codé par Meng et Fabuela. J'ai intervenu essentiellement sur la partie **Watson** et la partie **Web Service**.
 
