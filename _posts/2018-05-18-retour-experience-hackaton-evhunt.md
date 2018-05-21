@@ -9,7 +9,7 @@ comments: false
 ---
 
 # Introduction
-Je vous présente dans cet article mon retour d’expérience par rapport à mar participation au Hackaton Ev'hunt à la Société Générale les 16, 17 et 18 Mai 2018.
+Je vous présente dans cet article mon retour d’expérience par rapport à ma participation au Hackaton Ev'hunt à la Société Générale les 16, 17 et 18 Mai 2018.
 
 L’objectif du Hackathon est de créer une plateforme pour faciliter le contact RH, Manager et Candidats.
 
@@ -41,7 +41,7 @@ On a pensé une solution de bout-en-bout qui a pour objectif de :
 * ELK Stack pour le monitoring
 <img src="{{ site.url }}/images/2018-05-18-retour-experience-hackaton-evhunt/technos.png">
 
-Le développement **Android** et **ElsticSearch** a été assuré par Rafik. La partie Front en **Angular** a été entièrement codé par Meng et Fabuela. J'ai intervenu essentiellement sur la partie **Watson** et la partie **Web Service**.
+Le développement **Android** et **ElsticSearch** a été assuré par Rafik. La partie Front en **Angular** a été entièrement codée par Meng et Fabuela. J'ai intervenu essentiellement sur la partie **Watson** et la partie **Web Service**.
 
 # Watson
 J’ai utilisé leses services Watson pour le parsing des Cvs :
