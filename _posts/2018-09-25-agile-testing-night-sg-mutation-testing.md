@@ -158,4 +158,4 @@ C'esgt ainsi que le rapport passe au vert :
 <img src="{{ site.url }}/images/2018-09-25-agile-testing-night-sg-mutation-testing/step1-mutant.png">
 
 
-Le code est disponible sur https://github.com/Ahdak/mutation-testing
+Le code est disponible sur mon [Github](https://github.com/Ahdak/mutation-testing).
