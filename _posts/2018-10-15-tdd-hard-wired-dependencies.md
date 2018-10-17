@@ -12,6 +12,8 @@ Je me suis inspiré de la présentation du coach __Patrick GIRY @PatrickGIRY__ l
 
 Dans ce cas pratique, je reprend le KATA __Trip Service__. Il s'agit de tester un code legacy avec des dépendances en dur (hard-wired dependencies).
 
+Les sources sont disponibles sur [github](https://github.com/Ahdak/trip-service-kata).
+
 Regardons la classe ```TripService```
 
 ```java
