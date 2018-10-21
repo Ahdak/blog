@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Tester les application angular autrement"
+title: "Tester les applications angular autrement"
 date: 2018-10-18
-excerpt: "Tester les application angular autrement"
+excerpt: "12&13 Tester les applications angular autrement"
 tags: Angular 12@13 Testing JEST
 feature: /images/2018-10-18-tester-app-angular-autrement/2018-10-18-tester-app-angular-autrement-affiche.png
 comments: false

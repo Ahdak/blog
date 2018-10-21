@@ -3,7 +3,7 @@ layout: post
 title: "Google : Collaboration et environnement de travail"
 date: 2018-07-05
 excerpt: "Jean Luc Moisan - Manager Equipe google Cloud"
-tags: TechWeek2018 IA Data Meet-up Google
+tags: TechWeek2018 IA Data Meetup Google
 feature: /images/2018-07-05-techweek-sg-2018-google-environnement-travail/2018-07-05-techweek-sg-2018-google-environnement-travail.jpg
 comments: false
 ---

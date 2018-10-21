@@ -3,7 +3,7 @@ layout: post
 title: "Retour d'expérience sur la certification IBM Watson V3 Application Development"
 date: 2018-03-24
 excerpt: "Retour d'expérience et conseils de préparation"
-tags: Watson certification IBM
+tags: Watson certification IBM REX
 feature: /images/2018-03-24-retour-exp-certif-watson-dev-v3/2018-03-24-retour-exp-certif-watson-dev-v3-affiche.jpg
 comments: false
 ---

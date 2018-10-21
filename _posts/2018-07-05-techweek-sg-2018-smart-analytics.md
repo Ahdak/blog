@@ -3,7 +3,7 @@ layout: post
 title: "Smart Analytics"
 date: 2018-07-05
 excerpt: "Guillaume Rouduillere (ITEC/MKT/ARC)"
-tags: TechWeek2018 IA Data Meet-up
+tags: TechWeek2018 IA Data Meetup
 feature: /images/2018-07-05-techweek-sg-2018-smart-analytics/2018-07-05-techweek-sg-2018-smart-analytics-affiche.jpg
 comments: false
 ---

@@ -2,8 +2,8 @@
 layout: post
 title: "Agilité à l'échelle"
 date: 2018-10-16
-excerpt: "Tester les application angular autrement"
-tags: Agilite echelle agile@scale Meetup
+excerpt: "Meetup Agilité à l'échelle"
+tags: Agilite echelle agile@scale Meetup IBM IBMFranceLab
 feature: /images/2018-10-16-agilite-a-lechelle/2018-10-16-agilite-a-lechelle-affiche.png
 comments: false
 ---

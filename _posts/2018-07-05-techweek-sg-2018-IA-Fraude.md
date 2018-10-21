@@ -3,7 +3,7 @@ layout: post
 title: "Intelligence Artificielle : Quelles réelles opportunités de transformation des métiers ? Illustration par le cas concret de la lutte contre la fraude au sein de la SG"
 date: 2018-07-05
 excerpt: "Résumé présentation - IA - Tech Week 2018"
-tags: TechWeek2018 IA Data Meet-up
+tags: TechWeek2018 IA Data Meetup
 feature: /images/2018-07-05-techweek-sg-2018-IA-Fraude/2018-07-05-techweek-sg-2018-IA-Fraude-affiche.jpg
 comments: false
 ---

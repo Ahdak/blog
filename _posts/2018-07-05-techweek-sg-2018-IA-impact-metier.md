@@ -3,7 +3,7 @@ layout: post
 title: "IA - Quel impact sur nos métiers ?"
 date: 2018-07-05
 excerpt: "Résumé présentation - TechWeek2018 - Thierry HAMELIN - Directeur des études IDC"
-tags: TechWeek2018 IA Data Meet-up
+tags: TechWeek2018 IA Data Meetup
 feature: /images/2018-07-05-techweek-sg-2018-IA-impact-metier/2018-07-05-techweek-sg-2018-IA-impact-metier-affiche.jpg
 comments: false
 ---

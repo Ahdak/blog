@@ -3,7 +3,7 @@ layout: post
 title: "Retour d'expérience sur le Hackaton Ev'hunt à la Société Générale"
 date: 2018-05-18
 excerpt: "Retour d'expérience"
-tags: Watson IBM Hackaton Springboot JHipster Angular
+tags: Watson IBM Hackaton Springboot JHipster Angular REX
 feature: /images/2018-05-18-retour-experience-hackaton-evhunt/2018-05-18-retour-experience-hackaton-evhunt-affiche.jpg
 comments: false
 ---
