@@ -209,9 +209,9 @@ Cependant, __63% of projects faills__.
 * Organisation don’t really want to change (Organisation are implicitily optimised to avoid changing)
 
 Corollary :
-1- Any changement / initiative will be reduced to redefining or overloading
-2- Any change will be reduced to "theoritical", "Revolutionary" and "needs pragmatic customization for local concerns" which deflects from adressing weaknesses and manager status.
-3- After changing the change, some managers & single-specialist are still displaced, and they become "coaches" for the change, frequently Corollary 1 & 2
+1. Any changement / initiative will be reduced to redefining or overloading
+2. Any change will be reduced to "theoritical", "Revolutionary" and "needs pragmatic customization for local concerns" which deflects from adressing weaknesses and manager status.
+3. After changing the change, some managers & single-specialist are still displaced, and they become "coaches" for the change, frequently Corollary 1 & 2
 
 > Culture follows structure
 
@@ -248,12 +248,12 @@ Practices emerge through coaching, applied learning and experimentation. Having 
   * Be transparent
   * Hold others (esp leaders) to account
   * Accent that adaptors will required through transition
-* Scanling framework can help but in themselves do not
+* Scaling framework can help but in themselves do not
 * Apply System thinkings
   * Address impediments to flow
   * Visualise work - make the invisible visible
   * Limit Work in progress
-* Invest high qualioty Coaches
+* Invest high quality Coaches
 * Don't skip technical excellence
 * High performance, corss-functional team
 * Be aware of consultants presenting Top tips
