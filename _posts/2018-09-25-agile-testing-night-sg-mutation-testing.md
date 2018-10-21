@@ -2,8 +2,8 @@
 layout: post
 title: "Agile Testing Night 2 - SG"
 date: 2018-09-25
-excerpt: "Mutation Testing à la Agile Testing Night à la Société Générale"
-tags: Mutation Testing Agile TDD SG AgileTestingNight
+excerpt: "Meetup Mutation Testing à la Agile Testing Night à la Société Générale"
+tags: Mutation Testing Agile TDD SG AgileTestingNight Meetup
 feature: /images/2018-09-25-agile-testing-night-sg-mutation-testing/2018-09-25-agile-testing-night-sg-mutation-testing-affiche.jpg
 comments: false
 ---
