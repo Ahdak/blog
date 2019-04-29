@@ -22,4 +22,11 @@ Ce Blog est maintenu par Ahmed DAMMAK.
     # run local
     jekyll serve --incremental
 
+    # update bundle
+    bundle update
+
+    # if error like You have already activated XX 1.1.0, but your Gemfile requires XX 0.9.5
+    gem unistall XX
+    gem update
+
 ```
