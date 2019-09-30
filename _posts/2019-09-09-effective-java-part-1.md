@@ -43,3 +43,305 @@ Here are some examples of method names :
 - getType (`Files.getFileStore(...)`)
 - newType (eg `Files.newBufferedReader(...)`)
 - type (eg `Collections.list(...)`)
+
+# Item 2 : Consider a builder when faced with many constructor parameters
+
+To create class having many required parameters generally marked as `final`, developer often use __Telescoping constructor pattern__.
+
+```Java
+public class Person {
+  private final int age ;
+  private final int weight ;
+  private final String name ;
+  private final String fistName ;
+
+  public Person(String name, String firstName) {
+    this(0,0,name,firstName);
+  }
+
+  public Person(int weight, String name, String firstName) {
+    this(0,weight,name,firstName);
+  }
+
+  public Person(int age, int weight, String name, String firstName) {
+    this.age = age ;
+    this.weight = weight ;
+    this.name = name ;
+    this.firstName = firstName ;
+  }
+}
+```
+
+To instantiate this class
+```Java
+  Person person = new Person(30,90,"name","fistName") ;
+```
+
+It's hard to write code when there are many parameters, and still harder to read it.
+
+A second alternative, is to create __Java Beans__, creating getters & setters and removing final modifiers. But, in this case, created objects may be inconsistent,  because construction is split across multiple calls.
+
+Luckily, there is a third alternative which is `Builder Pattern`; combines telescoping and JavaBeans readability.
+
+```Java
+public class Person {
+
+    private final String name ;
+    private final String firstName ;
+    private final int age ;
+    private final int weight ;
+
+    private Person(int age, int weight, String name, String firstName) {
+        this.age = age;
+        this.weight = weight;
+        this.name = name;
+        this.firstName = firstName;
+    }
+
+    public static class PersonBuilder {
+        private int age = 0; // Optional
+        private int weight; // Optional
+        private final String name;
+        private final String firstName;
+
+        public PersonBuilder(String name, String firstName) {
+            this.name = name;
+            this.firstName = firstName;
+        }
+
+        public PersonBuilder age(int age) {
+            this.age = age;
+            return this;
+        }
+
+        public PersonBuilder weight(int weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        public Person build() {
+            return new Person(age, weight, name, firstName);
+        }
+
+        public String toString() {
+            return "Person.PersonBuilder(age=" + this.age + ", weight=" + this.weight + ", name=" + this.name + ", firstName=" + this.firstName + ")";
+        }
+    }
+}
+```
+
+You can also use `Lombok` framework with `@Builder` annotation:
+```Java
+import lombok.Builder;
+
+@Builder
+public class Person2 {
+    private final String name ;
+    private final String firstName ;
+    private final int age ;
+    private final int weight ;
+}
+```
+
+The builder pattern is well suited to class hierarchies :
+
+```Java
+public class Person {
+
+    public enum Properties {IS_MARRIED, HAS_CHILDREN, HAS_JOB}
+    final EnumSet<Properties> properties;
+
+    abstract static class Builder<T extends Builder<T>> {
+        final EnumSet<Properties> properties = EnumSet.noneOf(Properties.class);
+
+        // common method for all subclasses
+        public T addProperty(Properties property) {
+            properties.add(property) ;
+            return self() ;
+        }
+
+        abstract Person build() ;
+
+        protected abstract T self() ;
+
+    }
+
+    Person(Builder<?> builder) {
+     this.properties = builder.properties.clone();
+    }
+}
+```
+
+Creating then 2 subclasses with sub-builders
+```JAVA
+public class Person1 extends Person {
+    private final int age ;
+    public static class Person1Builder extends Person.Builder<Person1Builder> {
+
+        private final int age ;
+
+        public Person1Builder(int age) {
+            this.age = age;
+        }
+
+        Person1 build() {
+            return new Person1(this);
+        }
+
+        protected Person1Builder self() {
+            return this;
+        }
+    }
+
+    private Person1(Person1Builder builder) {
+        super(builder);
+        age=builder.age ;
+    }
+}
+```
+
+`Person1` class has extra-attribute `age` which is handled in the `Person1Builder`.
+
+```Java
+public static class Person2 extends Person {
+    private final String name;
+
+    public static class Person2Builder extends Person.Builder<Person2Builder> {
+
+        private final String name ;
+
+        public Person2Builder(String name) {
+            this.name = name;
+        }
+
+        Person2 build() {
+            return new Person2(this);
+        }
+
+        protected Person2Builder self() {
+            return this;
+        }
+    }
+
+    private Person2(Person2Builder builder) {
+        super(builder);
+        name=builder.name ;
+    }
+}
+```
+
+`Person2` class has extra-attribute `name` which is handled in the `Person2Builder`.
+
+Creating instances of `Person1` and `Person2` classes would be like :
+```Java
+Person1 person1 = new Person1.Person1Builder(30).addProperty(Person.Properties.HAS_CHILDREN).build() ;
+Person2 person2 = new Person2.Person2Builder("Ahmed").addProperty(Person.Properties.IS_MARRIED).build() ;
+```
+
+The builder pattern is a good choice when designing classes whose constructors or static factories would have more than a handful of parameters.
+
+# Item 3 : Consider the singleton property with a private constructor or an enum type
+
+A __Singleton__ is a class instantiated once, typically represents a stateless object.
+
+There are 2 common methods to create singletons :
+
+### Singleton with public static field
+```Java
+public class Singleton1 {
+    private static final Singleton1 INSTANCE = new Singleton1() ;
+    private Singleton1() {}
+}
+```
+
+Advantages :
+- The API makes it clear that the class is a singleton
+- The private field is `final`, so it will always contain the same object reference.
+
+### Singleton with public static factory
+```Java
+public class Singleton2 {
+    private static final Singleton2 INSTANCE = new Singleton2();
+    private Singleton2() {}
+    public static Singleton2 getInstance() {
+        return INSTANCE ;
+    }
+}
+```
+
+Advantages :
+- Flexibility in the API to change singleton
+- Can write `generic singleton factory`
+- The method reference can be used as a supplier, for example `Singleton2::instance` is a `Supplier<Singleton2>`.
+
+#### Generic Singleton factory pattern
+
+```Java
+public class GenericSingletonFactory<T> {
+
+    // Generic Singleton factory pattern
+    private static UnaryOperator<Object> IDENTITY_FUNCTION =(t) -> t ;
+
+    @SuppressWarnings("unchecked")
+    public static <T> UnaryOperator<T> identityFunction() {
+        return (UnaryOperator<T>) IDENTITY_FUNCTION;
+    }
+}
+```
+
+A simple example with `String` and `Number`:
+
+```Java
+public static void main(String[] args) {
+    String[] values = new String[] {"a","b"} ;
+    UnaryOperator<String> sameString = identityFunction();
+    for(String value : values)
+        System.out.println(sameString.apply(value));
+
+    Number[] numbers = new Number[] {1,2.0,3L} ;
+    UnaryOperator<Number> sameNumber = identityFunction();
+    for(Number number: numbers)
+        System.out.println(sameNumber.apply(number));
+}
+```
+
+The output of this program would be :
+```
+a
+b
+1
+2.0
+3
+```
+
+### Serializable Singleton
+
+It's not sufficient to add `implements Serializable` to the declaration to maintain Singleton guarantee.
+
+You should :
+- declare all the field `transient`
+- provide `readResolve` method which return the instance, otherwise, each time a serialized instance is deserialized, a new object is created.
+
+
+### Tips
+
+To defend against attack using `java.lang.reflect.AccessibleObject.setAccessible` method which invokes reflectively `private` constructor using , you can make the private constructor throw an exception if it's asked to create a second instance.
+
+### Enum Singleton
+
+A third way to implements singleton is to create a single-element enum :
+```Java
+public enum EnumSingleton {
+    INSTANCE ;
+
+    public void doSomething() {}
+}
+```
+
+Advantages :
+- Concise
+- Serializable for free
+- Guarantee against multiple instantiations, reflexions ...
+
+
+__The Enum Singleton is the best way to implements singleton__, but you can't use this approach if the singleton must extend a superclass other than enum.
