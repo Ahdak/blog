@@ -48,7 +48,7 @@ Here are some examples of method names :
 
 To create class having many required parameters generally marked as `final`, developer often use __Telescoping constructor pattern__.
 
-```Java
+```java
 public class Person {
   private final int age ;
   private final int weight ;
@@ -73,7 +73,7 @@ public class Person {
 ```
 
 To instantiate this class
-```Java
+```java
   Person person = new Person(30,90,"name","fistName") ;
 ```
 
@@ -83,7 +83,7 @@ A second alternative, is to create __Java Beans__, creating getters & setters an
 
 Luckily, there is a third alternative which is `Builder Pattern`; combines telescoping and JavaBeans readability.
 
-```Java
+```java
 public class Person {
 
     private final String name ;
@@ -131,7 +131,7 @@ public class Person {
 ```
 
 You can also use `Lombok` framework with `@Builder` annotation:
-```Java
+```java
 import lombok.Builder;
 
 @Builder
@@ -145,7 +145,7 @@ public class Person2 {
 
 The builder pattern is well suited to class hierarchies :
 
-```Java
+```java
 public class Person {
 
     public enum Properties {IS_MARRIED, HAS_CHILDREN, HAS_JOB}
@@ -173,7 +173,7 @@ public class Person {
 ```
 
 Creating then 2 subclasses with sub-builders
-```JAVA
+```java
 public class Person1 extends Person {
     private final int age ;
     public static class Person1Builder extends Person.Builder<Person1Builder> {
@@ -202,7 +202,7 @@ public class Person1 extends Person {
 
 `Person1` class has extra-attribute `age` which is handled in the `Person1Builder`.
 
-```Java
+```java
 public static class Person2 extends Person {
     private final String name;
 
@@ -233,7 +233,7 @@ public static class Person2 extends Person {
 `Person2` class has extra-attribute `name` which is handled in the `Person2Builder`.
 
 Creating instances of `Person1` and `Person2` classes would be like :
-```Java
+```java
 Person1 person1 = new Person1.Person1Builder(30).addProperty(Person.Properties.HAS_CHILDREN).build() ;
 Person2 person2 = new Person2.Person2Builder("Ahmed").addProperty(Person.Properties.IS_MARRIED).build() ;
 ```
@@ -247,7 +247,7 @@ A __Singleton__ is a class instantiated once, typically represents a stateless o
 There are 2 common methods to create singletons :
 
 ### Singleton with public static field
-```Java
+```java
 public class Singleton1 {
     private static final Singleton1 INSTANCE = new Singleton1() ;
     private Singleton1() {}
@@ -259,7 +259,7 @@ Advantages :
 - The private field is `final`, so it will always contain the same object reference.
 
 ### Singleton with public static factory
-```Java
+```java
 public class Singleton2 {
     private static final Singleton2 INSTANCE = new Singleton2();
     private Singleton2() {}
@@ -276,7 +276,7 @@ Advantages :
 
 #### Generic Singleton factory pattern
 
-```Java
+```java
 public class GenericSingletonFactory<T> {
 
     // Generic Singleton factory pattern
@@ -291,7 +291,7 @@ public class GenericSingletonFactory<T> {
 
 A simple example with `String` and `Number`:
 
-```Java
+```java
 public static void main(String[] args) {
     String[] values = new String[] {"a","b"} ;
     UnaryOperator<String> sameString = identityFunction();
@@ -330,7 +330,7 @@ To defend against attack using `java.lang.reflect.AccessibleObject.setAccessible
 ### Enum Singleton
 
 A third way to implements singleton is to create a single-element enum :
-```Java
+```java
 public enum EnumSingleton {
     INSTANCE ;
 
@@ -345,3 +345,104 @@ Advantages :
 
 
 __The Enum Singleton is the best way to implements singleton__, but you can't use this approach if the singleton must extend a superclass other than enum.
+
+# Item 4 : Enforce noninstantiability with a private constructor
+
+When writing classes that are just a grouping of `static` method and fields, it is recommended to make them non instantiable.
+
+```java
+public class UtilityClass {
+  // Suppress default constructor
+  private UtilityClass() {
+    throw new AssertionError() ;
+  }
+
+  // Some static methods ...  
+}
+```
+
+This pattern guarantees that this class will never be instantiated, and prevents this class of being subclassed.
+
+# Item 5 : Prefer dependency injection to hardwiring resources
+
+Many classes depend on one or more underlying resources, like the following example :
+
+```java
+public class Service {
+    private static final Helper helper = new Helper() ;
+    private Service() {}
+    public static Integer compute() {
+      // Some Business code ...
+    }
+}
+```
+
+It's not uncommon to have `Singleton` :
+
+```java
+public class ServiceSingleton {
+    private final Helper helper = new Helper() ;
+    private ServiceSingleton() {}
+    public static ServiceSingleton instance = new ServiceSingleton() ;
+    public Integer compute() {
+      // Some Business code ...
+    }
+}
+```
+
+In this case, we are assuming that there is only one `Helper` worth using. What is required is __the ability to support multiple instances__ of the class `Helper` in this example.
+
+A simple patterns that satisfies this requirement is `Dependency Injection` :
+
+```java
+public class Service {
+    private final Helper helper ;
+    private Service(Helper helper) {
+      this.helper = helper ;
+    }
+    public Integer compute() {
+      // Some Business code ...
+    }
+}
+```
+
+Dependency Injection provides flexibility, testability and reusability.
+
+A useful variant of this pattern is to pass resource `factory` to the constructor :
+
+```java
+public class Service {
+
+    private final Helper helper ;
+
+    public Service(Supplier<? extends Helper> helperFactory) {
+        this.helper = helperFactory.get() ;
+    }
+
+    private static class Helper {}
+
+    private static class Helper2 extends Helper {}
+
+    private static class HelperFactory {
+        static Helper createHelper() {
+            return new Helper() ;
+        }
+
+        static Helper2 createHelper2() {
+            return new Helper2() ;
+        }
+    }
+
+    public static void main(String[] args) {
+        Service service1 = new Service(Helper::new) ;
+        Service service2 = new Service(HelperFactory::createHelper) ;
+        Service service22 = new Service(HelperFactory::createHelper2) ;
+    }
+
+}
+```
+
+There are many dependency injection frameworks :
+- [Dagger](https://square.github.io/dagger/) for Java & Android
+- [Guice](https://github.com/google/guice) (pronounced 'juice') is a lightweight dependency injection framework for Java 6 and above, brought to you by Google.
+- [Spring](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-spring-beans-and-dependency-injection.html)
