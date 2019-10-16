@@ -446,3 +446,124 @@ There are many dependency injection frameworks :
 - [Dagger](https://square.github.io/dagger/) for Java & Android
 - [Guice](https://github.com/google/guice) (pronounced 'juice') is a lightweight dependency injection framework for Java 6 and above, brought to you by Google.
 - [Spring](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-spring-beans-and-dependency-injection.html)
+
+
+# Item 6 : Avoid creating unnecessary objects
+
+An object can be reused if it is immutable :
+```java
+    String doNotDoThat = new String("Do not do that");
+    String immutableString = "Immutable String" ;
+ ```
+
+ When invoking `String` constructor, millions of `String` instances ca be created needlessly.
+
+ We can often avoid creating unnecessary objects by using static factories such as `Boolean.valueOf(String)`, which is preferable than `Boolean(String)`.
+
+ Some objects creation is sometimes expensive, like `Pattern` compilation. It's better to create a `Pattern` and cache it, rather than using `String.match` method. `String.match` is the easiest way to check if a string matches a regular expression, but, it is not suitable for repeated use in performance-critical situations.
+
+ Another way to create unnecessary objects is __autoboxing__. Let's take the following example :
+ ```java
+ public static void main(String[] args) {
+
+     long start = System.currentTimeMillis();
+     Long sum = 0L ;
+     for(long i = 0 ; i <=Integer.MAX_VALUE; i++)
+         sum+=i ;
+     System.out.println((System.currentTimeMillis()-start) + " ms with autoboxing") ;
+
+
+     start = System.currentTimeMillis();
+     long sum2 = 0L ;
+     for(long i = 0 ; i <=Integer.MAX_VALUE; i++)
+         sum2+=i ;
+     System.out.println((System.currentTimeMillis()-start) + " ms without autoboxing") ;
+
+     start = System.currentTimeMillis();
+     sum = LongStream.range(0L,Integer.MAX_VALUE).sum() ;
+     System.out.println((System.currentTimeMillis()-start) + " ms with stream") ;
+
+ }
+ ```
+
+ The output of this program :
+ ```
+     5474 ms with autoboxing
+     689 ms without autoboxing
+     844 ms with stream
+ ```
+
+ The variable `sum` is declared as `Long` instead of `long`, which means that the program constructs about 2<sup>31</sup> unnecessary `Long` instances.
+
+ The lesson is clear : __Prefer primitives to boxed primitives, and watch out for unintentional autoboxing__.
+
+ The construction of small objects whose constructors do little explicit work, to enhance clarity and simplicity is generally good thing.
+
+ Conversely, avoiding object creation by maintaining your own object pool is a bad idea, unless the objects in the pool are extremely heavyweight, such as database connection; In fact, maintaining your object pool :
+ - clutters the code
+ - increase memory footprint
+ - harms performances
+
+# Item 7 : Eliminate obsolete object references
+Memory leaks in garbage-collected languages (known also as __unintentional object retention__) are insidious. If an object reference is unintentionally retained, not only is that object excluded from garbage collection, but so too are any object referenced by this object.
+
+The fix for this sort of problem is simple : null out references once they become obsolete.
+
+__Nulling out object references should be the exception rather than the norm__. The best way to eliminate an obsolete reference is to let the variable that contains the reference fall out of scope. that's occurs naturally when each variable is defined in the narrowest possible scope.
+
+Another common source of memory leaks is __caches__. Once you put an object reference into a cache, it's easy to forget that it's there. To handle that, represent the cache as `WeakHashMap`; entries will be removed automatically after they become obsolete. Remember that the desired lifetime of cache entries is determined by external references.
+
+```java
+public class WeakRefCache {
+
+    static class BigData{}
+    static class BigDataKey{
+        private final String key ;
+        BigDataKey(String key) {
+            this.key = key;
+        }
+    }
+
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WeakHashMap<BigDataKey, BigData> cache = new WeakHashMap<>() ;
+        // Put element in cache
+        BigDataKey key = new BigDataKey("key");
+        cache.put(key,new BigData());
+        System.out.println("elements count : " +cache.size());
+        // remove key
+        key = null ;
+        System.gc();
+        //check cache is empty
+        Thread.sleep(1000);
+        System.out.println("elements count : " +cache.size());
+    }
+}
+```
+
+The output of this program :
+```
+elements count : 1
+elements count : 0
+```
+
+A third source of memory leaks is listeners and other callbacks. To ensure that callbacks are garbage collected promptly, store weak references to them.
+```java
+public static void main(String[] args) throws InterruptedException {
+
+    WeakReference<BigData> reference = new WeakReference<>(new BigData()) ;
+    System.out.println("Reference is present : " + (reference.get() != null) );
+    System.gc();
+    Thread.sleep(1000);
+    System.out.println("Reference is present : " + (reference.get() != null) );
+}
+```
+
+The output of this program :
+```
+Reference is present : true
+Reference is present : false
+```
+
+To investigate about memory leaks, you can use debugging tools like `Heap profiler`.
