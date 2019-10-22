@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Effective Java - 3rd Edition - Part 1"
+title: "Effective Java - 3rd Edition - Creating and destroying objects"
 date: 2019-09-09
 excerpt: "What are the best practices for Java developer ?"
 tags: Java Effective-Java Best-Practices
@@ -567,3 +567,65 @@ Reference is present : false
 ```
 
 To investigate about memory leaks, you can use debugging tools like `Heap profiler`.
+
+# Item 8 : Avoid finalizers and cleaners
+
+Finalizers are often unpredictible, often dangerous, and generally unnecessary. Cleaners are less dangerous than finalizers, but still unpredictible, slow, and genrally unnecessary.
+
+There no garantuee that finalizers and cleaners will be executed. It can take long between the time that an object becomes unreachable and the time its finalizer or cleaners runs. There no garantee that they'll run at all.
+
+The promptness with which finalisers and cleaners are executed is primarely a function of the garbage collector.
+
+The method `System.gc()` and `System.runFinanlization` may increase the odds of finalizers or cleaners getting executed, but they don't guarantee it.
+
+Another problem with finaliers is that exception thrown during finalization are ignored, which leave the object in a corrupt state.
+
+There is a severe performance penality (50 times slower) for using finalizers and cleaners.
+
+Finalizers have serious security problem : they open your class up to finalizer attacks.
+
+## Use case ?
+Finalizers are used for objects which encapsulate resources that require termination (such as files or thread) and being called automatically by the garbage collector. It's an act of safety in case the owner of the resource neglects to call `close` method.
+
+A use of cleaners concerns objects with __native peers__(non-Java object to which a normal object delegates via native method).
+
+## `Cleaner` and `Cleanable`
+This class is added in In JDK9 :
+- `java.lang.ref.Cleanable` represents an object and a cleaning action registered in a Cleaner.
+- `Cleaner` manages a set of object references and corresponding cleaning actions.
+
+See [Oracle doc](https://docs.oracle.com/javase/9/docs/api/java/lang/ref/Cleaner.html).
+
+## Take away
+- Do not do anything time-critical in a finalizer or cleaner.
+- Do not depend on finalizers or cleaners to update persistent state.
+
+# Item 9 : Prefer `try`-with-resources than `try`-`finally`
+
+Java librairies include many resources that must be closed automatically by invoking `close` method.
+
+```java
+    // DO NOT DO THAT !!!
+    public void doNotDoThat(String input, String dest) throws IOException {
+        InputStream in = new FileInputStream(input);
+        try {
+            OutputStream out = new FileOutputStream(dest) ;
+            try {
+                // Do some thing
+            } finally {
+                out.close();
+            }
+        } finally {
+            in.close();
+        }
+    }
+```
+
+Use `try`-with-resources on multiple resources. The resulting code is shorter and cleaner, and the exception that it generates are more usefull.
+```java
+    public void shortAndSweet(String input, String dest) throws IOException {
+        try (InputStream in = new FileInputStream(input); OutputStream out = new FileOutputStream(dest)) {
+            // Do some thing
+        }
+    }
+```
