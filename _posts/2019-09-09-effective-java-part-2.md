@@ -403,3 +403,57 @@ The output :
 - Public `clone` method should omit the throws clause
 - All classes that implements `Cloneable` should override `clone` method with a public method whose return type is the class itself.
 - Prefer copy constructor or copy factory
+
+# Item 14 : Consider implementing `Comparable`
+The `compareTo` is declared in the `Comparable` interface. It permits order comparison in addition to simple equality comparison. By implementing `Comparable`, you allow your class to interoperate with all of the many generic algorithm and collection implementation that depends on this interface; eg `TreeSet<T>`, `TreeMap<T,V>`...
+
+## General contract
+- `x.compareTo(y)` should return :
+  - Negative integer if x is less than y
+  - O if x equals to y
+  - Positive integer if x greater than y
+- sign(`x.compareTo(y)`) == -sign(`y.compareTo(x)`)
+- if `x.compareTo(y) > 0` and `y.compareTo(z) > 0` then `x.compareTo(z) > 0`
+- if `x.compareTo(y) == 0`, then sign(`x.compareTo(z)`) == sign(`y.compareTo(z)`)
+- It's strongly recommended, but not required to have `x.compareTo(y) == 0 ` implies `x.equals(y) == true`
+
+Let's take the following example
+```java
+    BigDecimal bd1 = new BigDecimal("1.0");
+    BigDecimal bd2 = new BigDecimal("1.00");
+
+    TreeSet<BigDecimal> treeSet = Sets.newTreeSet();
+    treeSet.add(bd1);
+    treeSet.add(bd2);
+    System.out.println("Tree Set Size : " + treeSet.size());
+
+    HashSet<BigDecimal> hashSet = Sets.newHashSet();
+    hashSet.add(bd1);
+    hashSet.add(bd2);
+    System.out.println("Hash Set Size : " + hashSet.size());
+```
+
+The output :
+```
+    Tree Set Size : 1
+    Hash Set Size : 2
+```
+
+Since Java 7, static compare method were added to all of java's boxed primitive classes. Use of relational operator `>` and `<` in `compareTo` method is verbose and error-prone and no longer recommended.
+```java
+    Integer.compare(i1,i2) ;
+    Double.compare(d1,d2) ;
+    Float.compare(f1,f2) ;
+```
+
+Always starts with the most significant field and work your way down. If comparison is different from 0, you're done.
+
+In Java 8, the `Comparator` interface was outfitted with a set of `comparator construction methods`.
+```java
+    private static final Comparator<Person> COMPARATOR = Comparator.comparing(Person::getName).thenComparingInt(Person::getAge) ;
+
+    @Override
+    public int compareTo(Person other) {
+        return COMPARATOR.compare(this,other) ;
+    }
+```
