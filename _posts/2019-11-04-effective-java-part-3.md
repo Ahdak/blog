@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Effective Java - 3rd Edition - Classes and interfaces"
-date: 2019-10-22
+date: 2019-11-04
 excerpt: "What are the best practices for Java developer ?"
 tags: Java Effective-Java Best-Practices
 feature: /images/effective-java/effective-java-book.jpg
