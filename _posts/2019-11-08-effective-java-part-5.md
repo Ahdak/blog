@@ -387,3 +387,224 @@ The code initialize `EnumMap<Phase, EnumMap<Phase, TransitionWithMap>>` which co
 Suppose now that you want to add a new `Phase` to the system. Updating array-based program is risky. Ti update enum-based version, all you have to do is add elements in `TransitionWithMap`, and the program takes care of everything.
 
 # Item 38 : Emulate extensible enums with interfaces
+It is not possible to have on e enumerate type extend another. There is at least one compelling use case for extensible enumerated types, which is __operation codes__, also known as __opcodes__. An opcode is an enumerated type whose elements represent operations on some machine, such as `Operation` in the following example :
+```java
+    interface Operation {
+        public Double compute(Double x, Double y);
+    }
+    public enum BasicOperation implements Operation {
+
+        // Some code ... see Item 34
+
+        public Double compute(Double x, Double y) {
+            return operation.apply(x,y);
+        }
+    }
+```
+
+While enum type `BasicOperation` is not extensible, the interface type `Operation` is, and it is the interface type that is used to represent operations in the APIs :
+```java
+    Operation plus = BasicOperation.PLUS ;
+    System.out.println(plus.compute(1d,2d));
+```
+
+Not only is it possible to pass a single instance of an *extension enum* anywhere a *base enum* is expected, but it is possible to pass in an entire extension enum type and use its elements in addition to or instead of those of the base type:
+```java
+    static <T extends Enum<T> & Operation> void genericCompute (Class<T> opEnumtype, double x, double y) {
+        for (Operation op : opEnumtype.getEnumConstants()) {
+            System.out.println(op + " : " + op.compute(x,y));
+        }
+    }
+
+    public static void main(String[] args) {
+        genericCompute(BasicOperation.class,1,2);
+    }
+```
+
+The output is
+```
+PLUS : 3.0
+MINUS : -1.0
+TIMES : 2.0
+DIVIDE : 0.5
+```
+
+The `T extends Enum<T> & Operation` ensures that the type `T` represent both `enum` and `Operation`.
+
+A second alternative is to use bounded wildcard type :
+```java
+    static void wildCardCompute (Collection<? extends Operation> ops, double x, double y) {
+        for (Operation op : ops) {
+            System.out.println(op + " : " + op.compute(x,y));
+        }
+    }
+
+    public static void main(String[] args) {
+        wildCardCompute(Lists.newArrayList(BasicOperation.values()),1,2);
+    }
+```
+
+A minor disadvantage of the use of interface to emulate extensible enums is that implementations cannot be inherited from one enum type to another.
+
+# Item 39 : Prefer annotations to naming patterns
+Historically, it was common to use *naming pattern* to indicate that a some program elements demanded special treatment by a tool or a framework. For example, Junit 4 required test method beginning with `test`.
+
+this technique has many disadvantages :
+- Typographical error result in silent failures
+- No way to ensure that they are used only on appropriate program elements
+- Do not provide a good way to associate parameter values with program elements
+
+Annotations solve all this problems nicely. Generally, annotations don't change the semantics of the annotated code that enable it for special treatment by tools such as this simple test runner :
+```java
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    @interface MyAnnotation{}
+
+    public class Item39 {
+
+        @MyAnnotation
+        static void methodWithAnnotation() {
+            System.out.println("With Annotation");
+        }
+
+       static void methodWithoutAnnotation() {
+            System.out.println("No Annotation");
+        }
+
+        public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
+            for (Method m : Item39.class.getDeclaredMethods()) {
+                System.out.println(m.getName() + " " +m.isAnnotationPresent(MyAnnotation.class) );
+                if (m.isAnnotationPresent(MyAnnotation.class)) {
+                    m.invoke(null) ;
+                }
+            }
+        }
+    }
+
+```
+
+the output
+```
+main false
+methodWithoutAnnotation false
+methodWithAnnotation true
+With Annotation
+```
+
+The `@Retention(RetentionPolicy.RUNTIME)` indicates that the annotation should be retained at runtime. The `@Target(ElementType.METHOD)` indicates that the annotation is legal only on method declaration.
+
+## Annotations with parameter
+Annotation type can have parameters :
+```java
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    @interface MyAnnotation{
+        Class<? extends Exception> value() ;
+
+    }
+
+    public class Item39 {
+
+        @MyAnnotation(ArithmeticException.class)
+        static void methodWithAnnotation() {
+            System.out.println("");
+            int a = 1/0 ;
+        }
+
+        @MyAnnotation(IllegalAccessException.class)
+        static void methodWithoutAnnotation() {
+            throw new ArrayIndexOutOfBoundsException("Error");
+        }
+
+        public static void main(String[] args) throws InvocationTargetException, IllegalAccessException {
+            for (Method m : Item39.class.getDeclaredMethods()) {
+                if (m.isAnnotationPresent(MyAnnotation.class)) {
+                    Class<? extends Exception> expectedException = m.getAnnotation(MyAnnotation.class).value();
+                    try {
+                        m.invoke(null);
+                    } catch (Throwable e) {
+                        if (expectedException.isInstance(e.getCause())) {
+                            System.out.println("Expected exception " + e.getCause().getClass());
+                        } else {
+                            System.out.println("Not expected exception " + e.getCause().getClass());
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+```
+
+## Muti valued annotations
+It is possible to have annotation with an array of parameters
+```java
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    @interface MyAnnotation {
+        Class<? extends Exception>[] values();
+    }
+```
+
+Another way to do that is to annotate the annotation with `@Repeatable` to indicate that the annotation my be applied repeatedly to a single element.
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@Repeatable(AnnotationContainer.class)
+@interface MyAnnotation {
+    Class<? extends Exception> value();
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@interface AnnotationContainer {
+    MyAnnotation[] value() ;
+}
+```
+
+# Item 40 : Consistently use the `Override` annotation
+The most important annotation of Java libraries is `@Override`. If you consistently use this annotation, it will protect you from a large class of nefarious bugs.
+
+Let's take the following example :
+```java
+public class Person {
+
+    private String name ;
+
+    public Person(String name) {
+        this.name = name;
+    }
+
+    public boolean equals(Person person) {
+        return Objects.equals(name, person.name);
+    }
+
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    public static void main(String[] args) {
+        HashSet<Person> people = Sets.newHashSet(new Person("A"), new Person("A"), new Person("A"));
+        System.out.println(people.size());
+    }
+}
+```
+
+The program print `3` as size of the people `set`. Why ?
+
+It is because the `equals` method of `Object` has signature `equals(Object o)`. In this case, adding `@Override` annotation will help to detect this bug.
+
+Therefore, you should use the operator `@Override` annotation on every method declaration that you believe you override a superclass declaration.
+
+If you enable the appropriate check, your IDE can generate a warning if you have a method that doesn't have an `@Override` annotation but does override a super class method.
+
+# Item 41 : Use marker interface to define types
+A __Marker interface__ is an interface that contains no method declaration but merely designates (or marks a class that implements the interface as having some property; For example `Serializable`.
+
+Marker interfaces have 2 advantages over marker annotation :
+- Marker Interface define a type that is implemented by instances of the market class; marker annotations do not. You can then catch error at compile time.
+- Marker Interface can be targeted more precisely
+
+The chief advantage of __marker annotations__ is that they are part of the larger annotation facility.
+
+You must use an annotation if the marker applies to any program element other than a class or interface. If the marker applies only class or interfaces, ask yourself : *"Might I want to write one or more methods that accept only objects that have this marking ?"*. If so, you should use marker interface.
