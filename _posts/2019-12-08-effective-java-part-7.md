@@ -371,3 +371,20 @@ This code can be replaced with :
 > It is almost never appropriate to use an optional as a key, value, or element in collection or array
 
 # Item 56 : Write doc comments for all exposed API elements
+If an API is to be usable, ti must be documented. The java programming environment generates API documentation automatically from source code with specially formatted documentation comments, more commonly known as *doc comments*.
+
+To document your API properly, you must precede every exported class, interface, constructor, method, and field with a doc comment. It is frustrating and error-prone to use an API with missing documentation comments.
+
+## Documentation
+- The doc comment for a method should describe the contract between the method and its client :
+  - what the method does ?
+  - how it does its job ?
+  - preconditions (`@throws`)
+  - side effects
+- Doc comments should be readable both in the source code and in the generated documentation.
+- When documenting a generic type or method, be sure to document all type parameters
+- When documenting an `enum` type, be sure to document the constants
+- When documenting an annotation type, be sure to document any members as well as the type itself
+- Whether or not a class or static method os thread-safe, you should document it thread-safety
+
+Javadoc automatically checks for adherence to many of the recommendations in this item. In Java 7, the command line switch `-Xdoclint` was required to get this behavior. In java 8 & 9, checking is enabled by default.
