@@ -154,3 +154,88 @@ You must impose any synchronization on object serialization that you would impos
 Regardless of what serialized form you choose, declare an explicit serial version UID in every serializable class you write. Do not change the serial version UID unless you want to break compatibility with existing serialized instances of a class.
 
 # Item 88 : Write `readObject` methods defensively
+- Provide a `readObject` method that checks the validity of deserialized object, to prevent from violating class invariants.
+- When an object is deserialized, it is critical to defensively copy any field containing an object reference that a client must not process. This practive prevents from *rogue object references*. Note that defensive copying is not possible for `final` fields.
+- `readObject` method (and constructor) should not invoke an overridable method
+
+## Take away
+Anytime you write a `readObject` method, adopt the mind-set that you are writing a public constructor that must produce a valid instance :
+- For classes with object reference fields that must remain private, copy each object in such a field. Mutable component of immutable classes fall into this category
+- Check any invariants and throw an `InvalidObjectException` if a check fails
+- If an entire object graph must be validated after it sis deserialized, use the `ObjectInputValidationInterface`
+- Do not invoke any overridable methods in the class directly or indirectly
+
+> It is highly recommended to use *serialization proxy pattern* of safe deserialization.
+
+# Item 89 : For instance control, prefer enum types to `readResolve`
+The `readResolve` feature allows you ti substitute another instance for the one created by `readObject`. If the class of an object defines a `readResolve` method with the proper declaration, this method is invoked on the newly created object after it is deserialized. The object reference returned by this method is then returned in place of the newly created object.
+
+If you depend on `readResolve` for instance control, all instance fields with object reference types must be declared `transient`.
+
+If you write your serializable instance-controlled class as an enum, Java guarantees you that there can be no instances besides the declared constants.
+
+If you have to write a serializable instance-controlled class whose instances are not known at compile time, you will not be able to represent the class as an enum type.
+
+The accessibility of `readResolve` is significant. If you place a `readResolve` in a `final` class, it should be `private`. If you place `readResolve` on a non final class, you must carefully consider its accessibility for subclasses. If it is `private`, deserializing a subclass will produce a superclass instance, which is likely a `ClassCastException`.
+
+# Item 90 : Consider serialization proxies instead of serialized instances
+The serialization proxy pattern is reasonably straightforward :
+- Design a private static nested class (serialization proxy). It should have a single constructor whose parameter type is the enclosing class
+- Proxy and enclosing class must implement `Serializable`
+
+```java
+    class Period implements Serializable{
+
+
+        private static class SerializationProxy implements Serializable {
+            private final Date start ;
+            private final Date end ;
+            SerializationProxy(Period p) {
+                this.end = p.end ;
+                this.start=p.start ;
+            }
+            private static final long serialVersionUID = 123123L ;
+
+            private Object readResolve() {
+                return new Period(start,end) ;
+            }
+
+        }
+
+
+        private final Date start ;
+        private final Date end ;
+
+        public Period(Date start, Date end) {
+            this.start = new Date(start.getTime());
+            this.end = new Date(end.getTime());
+        }
+
+        // write replace method for the serialization proxy pattern
+        private Object writeReplace() {
+            return new SerializationProxy(this) ;
+        }
+
+        // Prevent attacks
+        private void readObject(ObjectInputStream s) throws IOException {
+            throw new InvalidObjectException("Proxy required !") ;
+        }
+    }
+```
+
+With the `writeReplace` method, the serialization system will never generate a serialized instance of  the enclosing class. To guarantee that no attack of enclosing type, the `readObject` throws exception.
+
+The `readResolve` on proxy creates an instance of the enclosing class using only its public API.
+
+
+This proxy stops the bogus byte-stream attack and the internal theft attack dead in their tracks.
+
+The serialization proxy pattern is more powerful than defensive copying in `readObject`.
+
+The serialization proxy pattern has two limitations :
+- it is not compatible with classes that are extendable by their users
+- it is not compatible with classes whose object graphs contain circularities
+
+If you attempt to invoke proxy's `readResolve` method, you'll get a `ClassCastException` because you don't have the object yet, only its serialization proxy.
+
+The add of proxy is not free, it is around 14% more expensive to serialize and deserialize.
