@@ -9,5 +9,5 @@ comments: false
 <center>
 <a href="http://ahdak.github.io/blog"><b>Ahmed DAMMAK</b></a>
 <br> Full Stack Developer
-<br> Softeam Cadextan
+<br> Software Craftmanship
 </center>
