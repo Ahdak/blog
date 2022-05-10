@@ -29,7 +29,7 @@ Kafka Stream
 Scalabilité / Resilience / calcul distribué / déclaratif 
 RocksDB est embarqué
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-stream-definition.jpg">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-stream-definition.jpg">
 
 
 On utilise la programmation impérative
@@ -50,7 +50,7 @@ Les actions menées par les experts :
 
 Les différence approche
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-stream-changement-plateforme.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-stream-changement-plateforme.png">
 
 
 ### REX 1
@@ -82,7 +82,7 @@ Solution temporaire :
 - Lire tout le flux compacté
 - Appliquer les jointures
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-stream-ordre-jointure.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-stream-ordre-jointure.png">
 
 ### REX 4 - Application Id
 

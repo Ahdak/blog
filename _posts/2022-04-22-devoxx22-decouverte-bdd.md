@@ -48,7 +48,7 @@ Les nouvelles architectures sont data-intensive -> Le bottleneck sera générale
 
 Les parties qui seront discutées : 
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/les-parties-bdd.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/les-parties-bdd.png">
 
 
 ### DBMS
@@ -147,7 +147,7 @@ Meme si on est sur un système distribué, on peut faire des optimisations.
 - Eviter le full scan
 - Le plan logique/physique sont accessible via l’EXPLAIN
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/bdd-conclusion-part-3.jpg">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/bdd-conclusion-part-3.jpg">
 
 ### Transaction Management
 
@@ -160,7 +160,7 @@ ACID transactions :
 
 Il existe plusieurs niveaux d'isolation :
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/bdd-isolation-level.jpg">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/bdd-isolation-level.jpg">
 
 Serialisable : Permet de changer les exécution concurrente en une suite de transactions.
 
@@ -174,7 +174,7 @@ Serialisable : Permet de changer les exécution concurrente en une suite de tran
 - utiliser les transactions
 - Attention à la concurrence / isolation
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/bdd-cpnclusion-4.jpg">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/bdd-cpnclusion-4.jpg">
 
 ### Distributed systems
 
@@ -213,7 +213,7 @@ Les algo permettent :
 - Replication
 - Rajout d’un membre
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/bdd-consistence-consensus.jpg">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/bdd-consistence-consensus.jpg">
 
 Découpage de données / Sharing :
 - split des dataset (partionnement) : découper les données dans une partitions (appelé aussi region / tablet / vnode …)
@@ -227,7 +227,7 @@ On peut avoir des topologies de machines en fonction des range des clés.
 
 Les clés sont des bytes. On peut mettre l’infos qu’on veut dedans.
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/bdd-tikv.jpg">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/bdd-tikv.jpg">
 
 ### Layered stack :
  - les nouvelles architectures se basent sur un gros clé valeur
@@ -248,4 +248,4 @@ Jepsen : détruire et vérifier les problèmes des BDD
 
 La panne dans les BDD n'est pas rare :
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/bdd-issues.jpg">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/bdd-issues.jpg">

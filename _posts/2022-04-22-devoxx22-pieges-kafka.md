@@ -79,7 +79,7 @@ Kafka exporter = expose des métriques supplémentaires pour Promoteus
 
 ### Ecriture du record
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-piege-record.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-piege-record.png">
 
 Send -> batching -> await sent -> retries
 
@@ -133,7 +133,7 @@ Il existe des topics compactés avec les dernières versions de chaque topic qui
 
 La méthode poll fait tout
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-piege-poll.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-piege-poll.png">
 
 Il faut appelé poll fréquemment, sinon le coordinateur risque de virer le noeud
 
@@ -170,7 +170,7 @@ SLO : application canary (Strimzi canary)
 
 ### L’offset management
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-piege-offset-management.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-piege-offset-management.png">
 
 3 manières de commit :
 Dans le Kafka pulled thread (Topic __cosumer_offset)
@@ -243,12 +243,12 @@ Tradeoff entre disponibilité & tolérance aux fautes
 
 Incremental cooperative rebalancing 
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-piege-rebalancing.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-piege-rebalancing.png">
 
 
 ### Alerts not enough copies
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-piege-topic-replication.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-piege-topic-replication.png">
 
 
 Il ne faut pas avoir un disque plein.
@@ -259,7 +259,7 @@ Si besoin de fix broker mal balancé, on peut utiliser l’outil CruiseControl.
 
 Pour la sécurité, les tokens sont gérés par identity openshift
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-piege-application.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-piege-application.png">
 
 ### Conclusion
 
@@ -267,7 +267,7 @@ Il est intéressant de gérer son Kafka
 Il faut prendre le control de ses données
 Interface user par RedHat
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/kafka-piege-operating-kafka.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/kafka-piege-operating-kafka.png">
 
 Check : <red-hat.com/kafka>
 

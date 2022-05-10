@@ -24,7 +24,7 @@ Challenges :
 
 Transaction ACID locale
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/micro-service-transction-messaging.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/micro-service-transction-messaging.png">
 
 L’isolation max est serializable, mais, on est souvent sur un compromis
 
@@ -56,11 +56,11 @@ Il y a des petits pièges :
 
 Demo LRA 
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/micro-service-LRA.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/micro-service-LRA.png">
 
 Entente demo (mode asynchrone)
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/micro-service-LRA-Eventuate.png">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/micro-service-LRA-Eventuate.png">
 
 Techno dbsum ? Pour tail log
 
@@ -73,5 +73,5 @@ Nariana est le seul orchestrateur
 
 Voir le code des démos
 
-<img src="{{ site.url }}/images/../../../images/2022-04-22-devoxx22/micro-service-resource.jpg">
+<img src="{{ site.url }}/images/2022-04-22-devoxx22/micro-service-resource.jpg">
 
