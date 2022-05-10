@@ -21,12 +21,12 @@ J'ai orienté mes choix de conférence de cette année autour de :
 
 
 Voici le résumé de mes notes :
-- [Découverte des base de données]({{ site.url }}/2022-04-22-devoxx22-decouverte-bdd/)
-- [Les pièges Kafka]({{ site.url }}/2022-04-22-devoxx22-pieges-kafka/)
-- [Kafka Stream]({{ site.url }}/2022-04-22-devoxx22-kafka-stream/)
-- [Doctolib cherche une nouvelle BDD]({{ site.url }}/2022-04-22-devoxx22-doctolib-new-db/)
-- [Architecture micro service]({{ site.url }}/2022-04-22-devoxx22-archi-micro-service/)
-- [Architecture Hexagonale]({{ site.url }}/2022-04-22-devoxx22-architecture-hexagonale/)
+- [Découverte des base de données]({{ site.url }}/devoxx22-decouverte-bdd/)
+- [Les pièges Kafka]({{ site.url }}/devoxx22-pieges-kafka/)
+- [Kafka Stream]({{ site.url }}/devoxx22-kafka-stream/)
+- [Doctolib cherche une nouvelle BDD]({{ site.url }}/devoxx22-doctolib-new-db/)
+- [Architecture micro service]({{ site.url }}/devoxx22-archi-micro-service/)
+- [Architecture Hexagonale]({{ site.url }}/devoxx22-architecture-hexagonale/)
 
 
 <img src="{{ site.url }}/images/2022-04-22-devoxx22/devoxx-10-ans.jpg">
